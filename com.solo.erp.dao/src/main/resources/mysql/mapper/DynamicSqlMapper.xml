@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solo.erp.dao.mapper.DynamicSqlMapper">
+
+    <resultMap id="BaseResultMap" type="java.util.HashMap">
+        <id column="id" jdbcType="INTEGER" javaType="Integer" property="id"/>
+        <id column="shop_id" jdbcType="INTEGER" javaType="Integer" property="shop_id"/>
+        <id column="is_enable" jdbcType="INTEGER" javaType="Integer" property="is_enable"/>
+    </resultMap>
+
+    <select id="selectAllMenuAndRole" resultMap="BaseResultMap">
+        SELECT
+	d.url,
+	group_concat( d.NAME SEPARATOR '|' ) as role_names
+FROM
+	(
+	SELECT
+		a.url,
+		c.NAME
+	FROM
+		erp_menu_info AS a
+		LEFT JOIN erp_role_menu_rel AS b ON a.id = b.menu_id
+		LEFT JOIN erp_role_info AS c ON b.role_id = c.id
+	WHERE
+		a.is_enable = '1'
+		AND c.is_enable = '1'
+	) AS d
+GROUP BY
+	d.url;
+    </select>
+
+    <select id="selectLoginStaffInfoByLoginName" resultMap="BaseResultMap">
+		SELECT
+	a.id,
+	a.shop_id,
+	( SELECT d.shop_name FROM erp_shop_info AS d WHERE d.id = a.shop_id ) AS shop_name,
+	a.login_name,
+	a.login_pwd,
+	a.staff_name,
+	a.staff_no,
+	a.staff_photo,
+	c.NAME AS role_name,
+	a.is_enable
+FROM
+	erp_staff_info AS a
+	LEFT JOIN erp_staff_role_rel AS b ON a.id = b.staff_id
+	LEFT JOIN erp_role_info AS c ON b.role_id = c.id
+WHERE
+	a.login_name = #{loginName}
+	AND a.is_enable = '1';
+	</select>
+</mapper>

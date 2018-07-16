@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry
+            location="/Users/solo/.m2/repository/mysql/mysql-connector-java/6.0.6/mysql-connector-java-6.0.6.jar"/>
+
+    <context id="erp" targetRuntime="MyBatis3">
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://39.104.50.53:3306/mall?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;nullCatalogMeansCurrent=true"
+                        userId="mall"
+                        password="mall123">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.solo.erp.dao.model"
+                            targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <sqlMapGenerator targetPackage="mysql.mapper"
+                         targetProject="./src/main/resources/">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.solo.erp.dao.mapper"
+                             targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="erp_inventory_info"/>
+        <table tableName="erp_menu_info"/>
+        <table tableName="erp_order_detail"/>
+        <table tableName="erp_order_info"/>
+        <table tableName="erp_product_info"/>
+        <table tableName="erp_role_info"/>
+        <table tableName="erp_role_menu_rel"/>
+        <table tableName="erp_shop_info"/>
+        <table tableName="erp_staff_info"/>
+        <table tableName="erp_vip_info"/>
+        <table tableName="erp_vip_ranks"/>
+        <table tableName="erp_vip_score"/>
+        <table tableName="erp_staff_role_rel"/>
+        <table tableName="erp_uid_sequence"/>
+    </context>
+</generatorConfiguration>

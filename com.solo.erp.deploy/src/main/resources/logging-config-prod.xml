@@ -1,0 +1,34 @@
+<configuration debug="false">
+    <property name="SYS_LOG_DIR" value="/root/logs/brickie"/>
+    <!-- 日志存放一年 -->
+    <property name="MAXHISTORYDAY" value="356"/>
+    <!-- 日志最大MB数 -->
+    <property name="MAXLOGSIZE" value="100MB"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <file>${SYS_LOG_DIR}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!--日志文件不能超过100MB,一旦超过就要归档 -->
+            <maxFileSize>${MAXLOGSIZE}</maxFileSize>
+            <maxHistory>${MAXHISTORYDAY}</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8">
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+</configuration>

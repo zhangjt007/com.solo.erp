@@ -40,4 +40,11 @@ public interface IErpVipInfoManager {
      * @return
      */
     PageInfo<ErpVipInfo> selectPage(VipInfoQueryRequest req);
+
+    /**
+     * 根据手机号查询
+     * @param mobile
+     * @return
+     */
+    ErpVipInfo selectByMobile(String mobile) throws ErpException;
 }

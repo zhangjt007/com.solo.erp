@@ -19,11 +19,7 @@ public class OrderApplyRequest extends BaseRequest {
 
     @NotBlank(message = "订单编号不能为空")
     private String orderNo;
-    private String payType;
-    @DecimalMin(value = "0.1")
-    private BigDecimal totalAmount;
     @Valid
     @NotEmpty
-    private List<OrderDetailBean> details;
-    private String remark;
+    private List<OrderDetailBean> list;
 }

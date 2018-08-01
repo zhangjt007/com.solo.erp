@@ -17,7 +17,7 @@
         </filter>
         <file>${SYS_LOG_DIR}/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${logPath}/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${SYS_LOG_DIR}/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <!--日志文件不能超过100MB,一旦超过就要归档 -->
             <maxFileSize>${MAXLOGSIZE}</maxFileSize>
             <maxHistory>${MAXHISTORYDAY}</maxHistory>

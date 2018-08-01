@@ -6,6 +6,7 @@ import com.solo.erp.common.dto.request.InventoryQueryRequest;
 import com.solo.erp.common.enums.EnumRespCode;
 import com.solo.erp.common.exception.ErpException;
 import com.solo.erp.common.utils.DateUtils;
+import com.solo.erp.common.utils.ProductParseUtil;
 import com.solo.erp.dao.mapper.ErpInventoryInfoMapper;
 import com.solo.erp.dao.mapper.ErpProductInfoMapper;
 import com.solo.erp.dao.model.ErpInventoryInfo;
@@ -43,23 +44,21 @@ public class ErpInventoryManagerImpl implements IErpInventoryManager {
      * @throws ErpException
      */
     @Override
-    public int stockIn(String productSn, int num, int shopId) throws ErpException {
+    public int stockIn(String productSn, int num, int shopId,String shopName) throws ErpException {
         log.info("商品入库-条码编号{}", productSn);
+        String productNo = ProductParseUtil.parseProductNo(productSn);
         ErpProductInfoExample productInfoExample = new ErpProductInfoExample();
-        productInfoExample.createCriteria().andProductSnEqualTo(productSn);
+        productInfoExample.createCriteria().andProductNoEqualTo(productNo);
         List<ErpProductInfo> productInfos = productInfoMapper.selectByExample(productInfoExample);
         if (productInfos == null || productInfos.isEmpty()) {
-            log.error("条码" + productSn + "商品信息不存在，不允许入库");
-            throw new ErpException(EnumRespCode.DATA_ERROR.getCode(), "条码" + productSn + "商品信息不存在，不允许入库");
+            log.error("条码" + productNo + "商品信息不存在，不允许入库");
+            throw new ErpException(EnumRespCode.DATA_ERROR.getCode(), "条码" + productNo + "商品信息不存在，不允许入库");
         }
         if (productInfos.size() > 1) {
-            log.error("条码" + productSn + "商品信息存在多条记录，不允许入库");
-            throw new ErpException(EnumRespCode.DATA_ERROR.getCode(), "条码" + productSn + "商品信息存在多条记录，不允许入库");
+            log.error("条码" + productNo + "商品信息存在多条记录，不允许入库");
+            throw new ErpException(EnumRespCode.DATA_ERROR.getCode(), "条码" + productNo + "商品信息存在多条记录，不允许入库");
         }
         ErpProductInfo productInfo = productInfos.get(0);
-        if (num <= 1) {
-            num = 1;
-        }
         int result = 0;
         ErpInventoryInfoExample inventoryInfoExample = new ErpInventoryInfoExample();
         inventoryInfoExample.createCriteria().andShopIdEqualTo(shopId).andProductSnEqualTo(productSn);
@@ -67,12 +66,16 @@ public class ErpInventoryManagerImpl implements IErpInventoryManager {
         if (erpInventoryInfos == null || erpInventoryInfos.isEmpty()) {
             ErpInventoryInfo inventoryInfo = new ErpInventoryInfo();
             inventoryInfo.setShopId(shopId);
+            inventoryInfo.setShopName(shopName);
             inventoryInfo.setProductSn(productSn);
-            inventoryInfo.setProductId(productInfo.getId());
+            inventoryInfo.setProductName(productInfo.getProductName());
+            inventoryInfo.setProductNo(ProductParseUtil.parseProductNo(productSn));
+            inventoryInfo.setColor(ProductParseUtil.parseColor(productSn));
+            inventoryInfo.setSize(ProductParseUtil.parseSize(productSn));
             inventoryInfo.setGmtModified(new Date());
             inventoryInfo.setGmtCreate(new Date());
-            inventoryInfo.setNum(num);
-            erpInventoryInfoMapper.insert(inventoryInfo);
+            inventoryInfo.setNum(num > 0 ? num : 1);
+            result = erpInventoryInfoMapper.insert(inventoryInfo);
             log.info("商品入库-门店{}新增条码{}商品库存信息", shopId, productSn);
         } else {
             ErpInventoryInfo info = erpInventoryInfos.get(0);
@@ -169,8 +172,20 @@ public class ErpInventoryManagerImpl implements IErpInventoryManager {
         if (!StringUtils.isEmpty(req.getProductSn())) {
             criteria.andProductSnEqualTo(req.getProductSn());
         }
-        if (!StringUtils.isEmpty(req.getNum())) {
-            criteria.andNumEqualTo(req.getNum());
+        if (!StringUtils.isEmpty(req.getProductName())) {
+            criteria.andProductNameLike("%" + req.getProductName() + "%");
+        }
+        if (!StringUtils.isEmpty(req.getProductSn())) {
+            criteria.andProductSnEqualTo(req.getProductSn());
+        }
+        if (req.getSize() >= 0) {
+            criteria.andSizeEqualTo(req.getSize());
+        }
+        if (!StringUtils.isEmpty(req.getColor())) {
+            criteria.andColorEqualTo(req.getColor());
+        }
+        if (req.getNum() > 0) {
+            criteria.andNumGreaterThanOrEqualTo(req.getNum());
         }
         if (!StringUtils.isEmpty(req.getGmtCreate())) {
             try {
@@ -179,7 +194,7 @@ public class ErpInventoryManagerImpl implements IErpInventoryManager {
                 throw new ErpException(EnumRespCode.SYSTEM_ERROR.getCode(), "创建日期格式解析错误");
             }
         }
-        PageInfo<ErpInventoryInfo> pageInfo = PageHelper.startPage(req.getPageNum(), req.getPageSize()).doSelectPageInfo(() -> erpInventoryInfoMapper.selectByExample(example));
+        PageInfo<ErpInventoryInfo> pageInfo = PageHelper.startPage(req.getPage(), req.getLimit()).doSelectPageInfo(() -> erpInventoryInfoMapper.selectByExample(example));
         return pageInfo;
     }
 }

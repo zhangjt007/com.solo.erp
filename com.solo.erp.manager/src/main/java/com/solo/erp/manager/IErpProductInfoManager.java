@@ -2,10 +2,10 @@ package com.solo.erp.manager;
 
 import com.github.pagehelper.PageInfo;
 import com.solo.erp.common.dto.request.ProductQueryRequest;
-import com.solo.erp.common.dto.request.VipInfoQueryRequest;
 import com.solo.erp.common.exception.ErpException;
 import com.solo.erp.dao.model.ErpProductInfo;
-import com.solo.erp.dao.model.ErpVipInfo;
+
+import java.util.List;
 
 public interface IErpProductInfoManager  {
     /**
@@ -16,6 +16,13 @@ public interface IErpProductInfoManager  {
      * @throws ErpException
      */
     int create(ErpProductInfo info) throws ErpException;
+
+    /**
+     * 批量插入商品信息
+     * @param list
+     * @throws ErpException
+     */
+    void batchInsert(List<ErpProductInfo> list) throws ErpException;
 
     /**
      * 更新商品信息
@@ -33,6 +40,14 @@ public interface IErpProductInfoManager  {
      * @return
      */
     ErpProductInfo selectById(int id);
+
+    /**
+     * 根据商品编号查询
+     * @param productNo
+     * @return
+     */
+    ErpProductInfo selectByProductNo(String productNo) throws ErpException;
+
 
     /**
      * 根据查询条件分页查询

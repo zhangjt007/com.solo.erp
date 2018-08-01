@@ -24,11 +24,6 @@
             <artifactId>com.solo.erp.dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.solo.erp.common</groupId>
-            <artifactId>com.solo.erp.common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
 </project>

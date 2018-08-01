@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Service("erpVipInfoManager")
 public class ErpVipInfoManagerImpl implements IErpVipInfoManager {
@@ -84,7 +85,25 @@ public class ErpVipInfoManagerImpl implements IErpVipInfoManager {
         if (!StringUtils.isEmpty(req.getUserName())) {
             criteria.andUserNameLike("%" + req.getUserName() + "%");
         }
-        PageInfo<ErpVipInfo> pageInfo = PageHelper.startPage(req.getPageNum(), req.getPageSize()).doSelectPageInfo(() -> erpVipInfoMapper.selectByExample(example));
+        PageInfo<ErpVipInfo> pageInfo = PageHelper.startPage(req.getPage(), req.getLimit()).doSelectPageInfo(() -> erpVipInfoMapper.selectByExample(example));
         return pageInfo;
+    }
+
+    /**
+     * 根据手机号查询
+     *
+     * @param mobile
+     * @return
+     */
+    @Override
+    public ErpVipInfo selectByMobile(String mobile) throws ErpException{
+        ErpVipInfoExample example = new ErpVipInfoExample();
+        example.createCriteria().andMobileEqualTo(mobile);
+        List<ErpVipInfo> result = this.erpVipInfoMapper.selectByExample(example);
+        if (result!=null&&!result.isEmpty()){
+            return result.get(0);
+        }else{
+            throw new ErpException(EnumRespCode.DATA_ERROR.getCode(),"会员信息不存在");
+        }
     }
 }

@@ -51,6 +51,7 @@ public class ErpStaffManagerImpl implements IErpStaffManager {
             bo.setRole(result.get("role_name").toString());
             bo.setName(result.get("staff_name").toString());
             bo.setStaffNo(result.get("staff_no").toString());
+            bo.setStaffPhoto(result.get("staff_photo").toString());
             int isEnable = (int) result.get("is_enable");
             if (EnumBool.TRUE.getCode() == isEnable) {
                 bo.setEnabled(true);

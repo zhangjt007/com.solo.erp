@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Data
 @ToString(callSuper = true)
@@ -12,8 +14,8 @@ public class VipInfoCreateRequest extends BaseRequest {
     private String userName;
     @NotBlank(message = "性别不能为空")
     private String sex;
-    @NotBlank(message = "生日不能为空")
-    private String brithday;
+    @NotNull(message = "生日不能为空")
+    private Date brithday;
     @NotBlank(message = "手机号不能为空")
     private String mobile;
     private String email;

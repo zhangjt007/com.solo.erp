@@ -15,7 +15,8 @@ public class OrderConfirmRequest extends BaseRequest {
     private String orderNo;
     @NotBlank(message = "支付类型不能为空")
     private String payType;
-    private int vipId;
+    private int vipId = -1;
     private BigDecimal payAmount;
+    private boolean scorePayFlag;
     private BigDecimal payScore;
 }

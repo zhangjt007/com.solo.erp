@@ -7,8 +7,8 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class BaseQueryRequest extends BaseRequest {
-    private int pageNum;
-    private int pageSize;
+    private int limit;
+    private int page;
     private String sort;
     private int shopId;
     private String gmtCreate;

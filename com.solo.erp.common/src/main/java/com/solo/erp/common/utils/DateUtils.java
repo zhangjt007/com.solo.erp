@@ -1,8 +1,5 @@
 package com.solo.erp.common.utils;
 
-import com.solo.erp.common.enums.EnumRespCode;
-import com.solo.erp.common.exception.ErpException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,13 +20,13 @@ public class DateUtils {
 
     public static Date parseToStart(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date result = sdf.parse(date + "00:00:00");
+        Date result = sdf.parse(date + " 00:00:00");
         return result;
     }
 
     public static Date parseToEnd(String date) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date result = sdf.parse(date + "23:59:59");
+        Date result = sdf.parse(date + " 23:59:59");
         return result;
     }
 

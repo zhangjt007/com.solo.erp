@@ -8,5 +8,5 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class InventoryCreateRequest extends BaseRequest {
     private String productSn;
-    private int num;
+    private int num = -1;
 }

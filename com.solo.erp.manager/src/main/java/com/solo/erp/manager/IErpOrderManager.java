@@ -1,5 +1,8 @@
 package com.solo.erp.manager;
 
+import com.github.pagehelper.PageInfo;
+import com.solo.erp.common.dto.request.OrderInfoQueryRequest;
+import com.solo.erp.common.exception.ErpException;
 import com.solo.erp.dao.model.ErpOrderDetail;
 import com.solo.erp.dao.model.ErpOrderInfo;
 
@@ -27,12 +30,12 @@ public interface IErpOrderManager {
     ErpOrderInfo selectByOrderNo(String orderNo);
 
     /**
-     * 根据订单ID查询订单明细
+     * 根据查询条件分页查询
      *
-     * @param orderId
+     * @param req
      * @return
      */
-    List<ErpOrderDetail> selectByOrderId(int orderId);
+    PageInfo<ErpOrderInfo> selectPage(OrderInfoQueryRequest req) throws ErpException;
 
     /**
      * 更新订单信息

@@ -1,5 +1,11 @@
 package com.solo.erp.manager.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.solo.erp.common.dto.request.OrderInfoQueryRequest;
+import com.solo.erp.common.enums.EnumRespCode;
+import com.solo.erp.common.exception.ErpException;
+import com.solo.erp.common.utils.DateUtils;
 import com.solo.erp.dao.mapper.ErpOrderDetailMapper;
 import com.solo.erp.dao.mapper.ErpOrderInfoMapper;
 import com.solo.erp.dao.model.ErpOrderDetail;
@@ -9,7 +15,9 @@ import com.solo.erp.dao.model.ErpOrderInfoExample;
 import com.solo.erp.manager.IErpOrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service("orderManager")
@@ -30,10 +38,8 @@ public class ErpOrderManagerImpl implements IErpOrderManager {
     @Override
     public int insertOrderInfo(ErpOrderInfo orderInfo, List<ErpOrderDetail> orderDetails) {
         int record = orderInfoMapper.insert(orderInfo);
-        int order_id = orderInfo.getId();
         if (orderDetails != null && !orderDetails.isEmpty()) {
             for (ErpOrderDetail detail : orderDetails) {
-                detail.setOrderId(order_id);
                 orderDetailMapper.insert(detail);
             }
         }
@@ -55,17 +61,39 @@ public class ErpOrderManagerImpl implements IErpOrderManager {
     }
 
     /**
-     * 根据订单ID查询订单明细
+     * 根据查询条件分页查询
      *
-     * @param orderId
+     * @param req
      * @return
      */
     @Override
-    public List<ErpOrderDetail> selectByOrderId(int orderId) {
-        ErpOrderDetailExample erpOrderDetailExample = new ErpOrderDetailExample();
-        erpOrderDetailExample.createCriteria().andOrderIdEqualTo(orderId);
-        List<ErpOrderDetail> result = this.orderDetailMapper.selectByExample(erpOrderDetailExample);
-        return result;
+    public PageInfo<ErpOrderInfo> selectPage(OrderInfoQueryRequest req) throws ErpException {
+        ErpOrderInfoExample example = new ErpOrderInfoExample();
+        ErpOrderInfoExample.Criteria criteria = example.createCriteria();
+        if (!StringUtils.isEmpty(req.getOrderNo())) {
+            criteria.andOrderNoEqualTo(req.getOrderNo());
+        }
+        if (!StringUtils.isEmpty(req.getOrderStatus())) {
+            criteria.andOrderStatusEqualTo(req.getOrderStatus());
+        }
+        if (!StringUtils.isEmpty(req.getStaffName())) {
+            criteria.andStaffNameLike("%" + req.getStaffName() + "%");
+        }
+        if (req.isRefundFlag()) {
+            criteria.andIsRefundEqualTo(req.isRefundFlag());
+        }
+        if (!StringUtils.isEmpty(req.getPayType())) {
+            criteria.andPayTypeEqualTo(req.getPayType());
+        }
+        if (!StringUtils.isEmpty(req.getGmtCreate())) {
+            try {
+                criteria.andGmtCreateBetween(DateUtils.parseToStart(req.getGmtCreate()), DateUtils.parseToEnd(req.getGmtCreate()));
+            } catch (ParseException e) {
+                throw new ErpException(EnumRespCode.SYSTEM_ERROR.getCode(), "创建日期格式解析错误");
+            }
+        }
+        PageInfo<ErpOrderInfo> pageInfo = PageHelper.startPage(req.getPage(), req.getLimit()).doSelectPageInfo(() -> orderInfoMapper.selectByExample(example));
+        return pageInfo;
     }
 
     /**

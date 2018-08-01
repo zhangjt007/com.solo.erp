@@ -4,20 +4,24 @@ import com.github.pagehelper.PageInfo;
 import com.solo.erp.common.dto.request.InventoryQueryRequest;
 import com.solo.erp.common.exception.ErpException;
 import com.solo.erp.dao.model.ErpInventoryInfo;
+import com.solo.erp.manager.bo.LoginUserBO;
 
 public interface IErpInventoryManager {
     /**
      * 商品入库
+     *
      * @param productSn
      * @param num
      * @param shopId
+     * @param shopName
      * @return
      * @throws ErpException
      */
-    int stockIn(String productSn, int num, int shopId) throws ErpException;
+    int stockIn(String productSn, int num, int shopId,String shopName) throws ErpException;
 
     /**
      * 商品出库
+     *
      * @param productSn
      * @param num
      * @param shopId

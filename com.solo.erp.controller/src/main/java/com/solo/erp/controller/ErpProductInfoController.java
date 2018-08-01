@@ -1,30 +1,30 @@
 package com.solo.erp.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.solo.erp.common.dto.request.*;
+import com.solo.erp.common.dto.request.ProductCreateRequest;
+import com.solo.erp.common.dto.request.ProductImportRequest;
+import com.solo.erp.common.dto.request.ProductQueryRequest;
+import com.solo.erp.common.dto.request.ProductUpdateRequest;
 import com.solo.erp.common.dto.response.BaseDetailViewResponse;
 import com.solo.erp.common.dto.response.BaseQueryPageResponse;
 import com.solo.erp.common.dto.response.BaseResponse;
 import com.solo.erp.common.enums.EnumRespCode;
 import com.solo.erp.common.exception.ErpException;
-import com.solo.erp.common.utils.DateUtils;
+import com.solo.erp.common.utils.ProductParseUtil;
 import com.solo.erp.controller.base.BaseController;
 import com.solo.erp.dao.model.ErpProductInfo;
-import com.solo.erp.dao.model.ErpVipInfo;
 import com.solo.erp.manager.IErpProductInfoManager;
-import com.solo.erp.manager.IErpVipInfoManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -63,17 +63,23 @@ public class ErpProductInfoController extends BaseController {
         BaseResponse resp = new BaseResponse();
         int count = 0;
         ErpProductInfo info = new ErpProductInfo();
-        info.setBrandName(req.getBrandName());
+        String productNo = req.getProductNo();
+        info.setProductNo(productNo);
         info.setColor(req.getColor());
-        info.setDiscount(req.getDiscount());
         info.setProductImg(req.getProductImg());
         info.setProductName(req.getProductName());
-        info.setProductSn(req.getProductSn());
         info.setProductThums(req.getProductThums());
-        info.setRealPrice(req.getRealPrice());
+        info.setBrandName(ProductParseUtil.parseBrandName(productNo));
+        info.setYear(ProductParseUtil.parseYear(productNo));
+        info.setProductType(ProductParseUtil.parseType(productNo));
+        info.setSeason(ProductParseUtil.parseSession(productNo));
+        info.setWaveBand(ProductParseUtil.parseWaveBand(productNo));
         info.setRemark(req.getRemark());
         info.setSize(req.getSize());
+        info.setRealPrice(req.getRealPrice());
         info.setTagPrice(req.getTagPrice());
+        info.setCostPrice(req.getCostPrice());
+        info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
         info.setGmtCreate(new Date());
         info.setGmtModified(new Date());
         try {
@@ -92,6 +98,57 @@ public class ErpProductInfoController extends BaseController {
         return resp;
     }
 
+    @RequestMapping(value = "/import", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse batchImport(@RequestBody @Valid ProductImportRequest req, final BindingResult result) {
+        checkError(result);
+        BaseResponse resp = new BaseResponse();
+        List<ErpProductInfo> list = new ArrayList<>();
+        for (String bean : req.getList()) {
+            JSONObject object = (JSONObject) JSONObject.parse(bean);
+            String productNo = object.getString("款号");
+            String productImg = object.getString("图片");
+            String productName = object.getString("品名");
+            String color = object.getString("颜色");
+            String size = object.getString("尺码");
+            BigDecimal tagPrice = object.getBigDecimal("吊牌价");
+            BigDecimal costPrice = object.getBigDecimal("成本");
+            String remark = object.getString("备注");
+
+            ErpProductInfo info = new ErpProductInfo();
+            info.setBrandName(ProductParseUtil.parseBrandName(productNo));
+            info.setProductNo(productNo);
+            info.setProductName(productName);
+            info.setProductImg(productImg);
+            info.setProductThums(productImg);
+            info.setYear(ProductParseUtil.parseYear(productNo));
+            info.setProductType(ProductParseUtil.parseType(productNo));
+            info.setSeason(ProductParseUtil.parseSession(productNo));
+            info.setWaveBand(ProductParseUtil.parseWaveBand(productNo));
+            info.setRealPrice(tagPrice);
+            info.setRemark(remark);
+            info.setSize(size);
+            info.setColor(color);
+            info.setTagPrice(tagPrice);
+            info.setRealPrice(tagPrice);
+            info.setCostPrice(costPrice);
+            info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
+            info.setGmtCreate(new Date());
+            info.setGmtModified(new Date());
+            list.add(info);
+        }
+        try {
+            erpProductInfoManager.batchInsert(list);
+        } catch (ErpException e) {
+            resp.setCode(e.getErrorCode());
+            resp.setMessage(e.getErrorMsg());
+        }
+
+        resp.setCode(EnumRespCode.SUCCESS.getCode());
+        resp.setMessage("导入产品信息成功，共计" + list.size() + "条");
+        return resp;
+    }
+
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@RequestBody @Valid ProductUpdateRequest req, final BindingResult result) {
@@ -100,17 +157,16 @@ public class ErpProductInfoController extends BaseController {
         int count = 0;
         ErpProductInfo info = new ErpProductInfo();
         info.setId(req.getId());
-        info.setBrandName(req.getBrandName());
         info.setColor(req.getColor());
-        info.setDiscount(req.getDiscount());
+        info.setSize(req.getSize());
         info.setProductImg(req.getProductImg());
         info.setProductName(req.getProductName());
-        info.setProductSn(req.getProductSn());
         info.setProductThums(req.getProductThums());
         info.setRealPrice(req.getRealPrice());
-        info.setRemark(req.getRemark());
-        info.setSize(req.getSize());
         info.setTagPrice(req.getTagPrice());
+        info.setCostPrice(req.getCostPrice());
+        info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
+        info.setRemark(req.getRemark());
         info.setGmtModified(new Date());
         try {
             count = erpProductInfoManager.update(info);

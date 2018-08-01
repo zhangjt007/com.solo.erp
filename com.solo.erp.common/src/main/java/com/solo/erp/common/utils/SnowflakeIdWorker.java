@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class Snowflake {
+public class SnowflakeIdWorker {
     /*
      * bits allocations for timeStamp, datacenterId, workerId and sequence
 	 */
@@ -12,7 +12,7 @@ public class Snowflake {
     private final long unusedBits = 1L;
     /**
      * 'time stamp' here is defined as the number of millisecond that have
-     * elapsed since the {@link #epoch} given by users on {@link Snowflake}
+     * elapsed since the {@link #epoch} given by users on {@link SnowflakeIdWorker}
      * instance initialization
      */
     private final long timestampBits = 41L;
@@ -87,20 +87,16 @@ public class Snowflake {
                     String.format("Clock moved backwards. Refusing to generate id for %d milliseconds",
                             lastTimestamp - currTimestamp));
         }
-
         if (currTimestamp == lastTimestamp) {
             sequence = (sequence + 1) & maxSequence;
             if (sequence == 0) { // overflow: greater than max sequence
                 currTimestamp = waitNextMillis(currTimestamp);
             }
-
         } else { // reset to 0 for next period/millisecond
             sequence = 0L;
         }
-
         // track and memo the time stamp last snowflake ID generated
         lastTimestamp = currTimestamp;
-
         return ((currTimestamp - epoch) << timestampShift) | //
                 (datacenterId << datacenterIdShift) | //
                 (workerId << workerIdShift) | // new line for nice looking
@@ -111,7 +107,7 @@ public class Snowflake {
      * @param datacenterId data center number the process running on, value range: [0,31]
      * @param workerId     machine or process number, value range: [0,31]
      */
-    public Snowflake(long datacenterId, long workerId) {
+    public SnowflakeIdWorker(long datacenterId, long workerId) {
         if (datacenterId > maxDatacenterId || datacenterId < 0) {
             throw new IllegalArgumentException(
                     String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
@@ -161,11 +157,11 @@ public class Snowflake {
     }
 
     /**
-     * show settings of Snowflake
+     * show settings of SnowflakeIdWorker
      */
     @Override
     public String toString() {
-        return "Snowflake Settings [timestampBits=" + timestampBits + ", datacenterIdBits=" + datacenterIdBits
+        return "SnowflakeIdWorker Settings [timestampBits=" + timestampBits + ", datacenterIdBits=" + datacenterIdBits
                 + ", workerIdBits=" + workerIdBits + ", sequenceBits=" + sequenceBits + ", epoch=" + epoch
                 + ", datacenterId=" + datacenterId + ", workerId=" + workerId + "]";
     }

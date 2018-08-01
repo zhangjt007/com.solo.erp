@@ -47,6 +47,17 @@ public class ErpVipInfoController extends BaseController {
         return resp;
     }
 
+    @RequestMapping(value = "/mobile/{mobile}", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseDetailViewResponse getByMobile(@PathVariable("mobile") String mobile) {
+        BaseDetailViewResponse resp = new BaseDetailViewResponse();
+        ErpVipInfo info = erpVipInfoManager.selectByMobile(mobile);
+        resp.setData(info);
+        resp.setCode(EnumRespCode.SUCCESS.getCode());
+        resp.setMessage("获取信息成功");
+        return resp;
+    }
+
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     public BaseQueryPageResponse query(@RequestBody @Valid VipInfoQueryRequest req, final BindingResult result) {
@@ -68,13 +79,7 @@ public class ErpVipInfoController extends BaseController {
         int count = 0;
         ErpVipInfo info = new ErpVipInfo();
         info.setAddress(req.getAddress());
-        if (!StringUtils.isEmpty(req.getBrithday())) {
-            try {
-                info.setBrithday(DateUtils.parse(req.getBrithday()));
-            } catch (ParseException e) {
-                throw new ErpException(EnumRespCode.SYSTEM_ERROR.getCode(), "生日格式解析错误");
-            }
-        }
+        info.setBrithday(req.getBrithday());
         info.setEmail(req.getEmail());
         info.setGmtCreate(new Date());
         info.setHistoryScore(BigDecimal.ZERO);
@@ -83,6 +88,7 @@ public class ErpVipInfoController extends BaseController {
         info.setRemark(req.getRemark());
         info.setScore(BigDecimal.ZERO);
         info.setSex(req.getSex());
+        info.setCreateDate(new Date());
         info.setGmtModified(new Date());
         info.setStaffId(bo.getId());
         info.setStaffName(bo.getName());
@@ -112,13 +118,7 @@ public class ErpVipInfoController extends BaseController {
         int count = 0;
         ErpVipInfo info = new ErpVipInfo();
         info.setAddress(req.getAddress());
-        if (!StringUtils.isEmpty(req.getBrithday())) {
-            try {
-                info.setBrithday(DateUtils.parse(req.getBrithday()));
-            } catch (ParseException e) {
-                throw new ErpException(EnumRespCode.SYSTEM_ERROR.getCode(), "生日格式解析错误");
-            }
-        }
+        info.setBrithday(req.getBrithday());
         info.setId(req.getId());
         info.setEmail(req.getEmail());
         info.setIsEnable(true);

@@ -10,15 +10,13 @@ import java.math.BigDecimal;
 @ToString(callSuper = true)
 public class ProductUpdateRequest extends BaseRequest {
     private int id;
-    private String productSn;
     private String productName;
     private String productImg;
     private String productThums;
-    private String brandName;
     private String size;
     private String color;
-    private int discount;
     private BigDecimal tagPrice;
     private BigDecimal realPrice;
+    private BigDecimal costPrice;
     private String remark;
 }

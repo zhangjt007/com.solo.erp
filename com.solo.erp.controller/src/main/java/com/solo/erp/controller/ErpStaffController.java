@@ -106,6 +106,7 @@ public class ErpStaffController extends BaseController {
         Set roles = new HashSet();
         roles.add(bo.getRole());
         response.setRoles(roles);
+        response.setAvatar(bo.getStaffPhoto());
         response.setShopName(bo.getShopName());
         response.setCode(EnumRespCode.SUCCESS.getCode());
         response.setMessage(EnumRespCode.SUCCESS.getMsg());

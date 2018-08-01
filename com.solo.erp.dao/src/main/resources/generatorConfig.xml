@@ -33,19 +33,22 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="erp_inventory_info"/>
-        <table tableName="erp_menu_info"/>
+
+        <table tableName="erp_vip_info"/>
+
+
+        <!--<table tableName="erp_menu_info"/>
         <table tableName="erp_order_detail"/>
         <table tableName="erp_order_info"/>
         <table tableName="erp_product_info"/>
+        <table tableName="erp_inventory_info"/>
         <table tableName="erp_role_info"/>
         <table tableName="erp_role_menu_rel"/>
         <table tableName="erp_shop_info"/>
         <table tableName="erp_staff_info"/>
-        <table tableName="erp_vip_info"/>
         <table tableName="erp_vip_ranks"/>
         <table tableName="erp_vip_score"/>
         <table tableName="erp_staff_role_rel"/>
-        <table tableName="erp_uid_sequence"/>
+        <table tableName="erp_uid_sequence"/>-->
     </context>
 </generatorConfiguration>

@@ -18,6 +18,9 @@
     <name>com.solo.erp</name>
 
     <properties>
+        <project.build.finalName>com.solo.erp.deploy-1.0-SNAPSHOT</project.build.finalName>
+        <project.version>1.0-SNAPSHOT</project.version>
+        <docker.image.prefix>registry.cn-huhehaote.aliyuncs.com/zhangjt/zhangjt</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -137,10 +140,6 @@
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
         <pluginManagement>

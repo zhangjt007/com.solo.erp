@@ -14,7 +14,9 @@ import com.solo.erp.common.exception.ErpException;
 import com.solo.erp.common.utils.ProductParseUtil;
 import com.solo.erp.controller.base.BaseController;
 import com.solo.erp.dao.model.ErpProductInfo;
-import com.solo.erp.manager.IErpProductInfoManager;
+import com.solo.erp.manager.business.IErpProductInfoManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -22,43 +24,50 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ErpProductInfoController extends BaseController {
 
+    private static final Logger log = LoggerFactory.getLogger(ErpProductInfoController.class);
+
     @Autowired
-    IErpProductInfoManager erpProductInfoManager;
+    private IErpProductInfoManager erpProductInfoManager;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public BaseDetailViewResponse getByID(@PathVariable("id") Integer id) {
+        long start = System.currentTimeMillis();
         BaseDetailViewResponse resp = new BaseDetailViewResponse();
         ErpProductInfo info = erpProductInfoManager.selectById(id);
         resp.setData(info);
         resp.setCode(EnumRespCode.SUCCESS.getCode());
         resp.setMessage("获取信息成功");
+        log.info("/api/product/{}，耗时{}ms",id, System.currentTimeMillis() - start);
         return resp;
     }
 
     @RequestMapping(value = "/query", method = RequestMethod.POST)
     @ResponseBody
     public BaseQueryPageResponse<ErpProductInfo> query(@RequestBody @Valid ProductQueryRequest req, final BindingResult result) {
+        long start = System.currentTimeMillis();
         checkError(result);
         BaseQueryPageResponse resp = new BaseQueryPageResponse();
         PageInfo<ErpProductInfo> page = erpProductInfoManager.selectPage(req);
         BeanUtils.copyProperties(page, resp);
         resp.setCode(EnumRespCode.SUCCESS.getCode());
         resp.setMessage("查询成功");
+        log.info("/api/product/query，耗时{}ms", System.currentTimeMillis() - start);
         return resp;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse create(@RequestBody @Valid ProductCreateRequest req, final BindingResult result) {
+        long start = System.currentTimeMillis();
         checkError(result);
         BaseResponse resp = new BaseResponse();
         int count = 0;
@@ -80,8 +89,8 @@ public class ErpProductInfoController extends BaseController {
         info.setTagPrice(req.getTagPrice());
         info.setCostPrice(req.getCostPrice());
         info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
-        info.setGmtCreate(new Date());
-        info.setGmtModified(new Date());
+        info.setGmtCreate(LocalDateTime.now());
+        info.setGmtModified(LocalDateTime.now());
         try {
             count = erpProductInfoManager.create(info);
         } catch (ErpException e) {
@@ -95,12 +104,14 @@ public class ErpProductInfoController extends BaseController {
             resp.setCode(EnumRespCode.SUCCESS.getCode());
             resp.setMessage("新增产品信息成功");
         }
+        log.info("/api/product/create，耗时{}ms", System.currentTimeMillis() - start);
         return resp;
     }
 
     @RequestMapping(value = "/import", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse batchImport(@RequestBody @Valid ProductImportRequest req, final BindingResult result) {
+        long start = System.currentTimeMillis();
         checkError(result);
         BaseResponse resp = new BaseResponse();
         List<ErpProductInfo> list = new ArrayList<>();
@@ -133,8 +144,8 @@ public class ErpProductInfoController extends BaseController {
             info.setRealPrice(tagPrice);
             info.setCostPrice(costPrice);
             info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
-            info.setGmtCreate(new Date());
-            info.setGmtModified(new Date());
+            info.setGmtCreate(LocalDateTime.now());
+            info.setGmtModified(LocalDateTime.now());
             list.add(info);
         }
         try {
@@ -146,12 +157,14 @@ public class ErpProductInfoController extends BaseController {
 
         resp.setCode(EnumRespCode.SUCCESS.getCode());
         resp.setMessage("导入产品信息成功，共计" + list.size() + "条");
+        log.info("/api/product/import，耗时{}ms", System.currentTimeMillis() - start);
         return resp;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@RequestBody @Valid ProductUpdateRequest req, final BindingResult result) {
+        long start = System.currentTimeMillis();
         checkError(result);
         BaseResponse resp = new BaseResponse();
         int count = 0;
@@ -167,7 +180,7 @@ public class ErpProductInfoController extends BaseController {
         info.setCostPrice(req.getCostPrice());
         info.setDiscount(info.getRealPrice().divide(info.getTagPrice(),2,BigDecimal.ROUND_DOWN).multiply(new BigDecimal(100)).intValue());
         info.setRemark(req.getRemark());
-        info.setGmtModified(new Date());
+        info.setGmtModified(LocalDateTime.now());
         try {
             count = erpProductInfoManager.update(info);
         } catch (ErpException e) {
@@ -181,6 +194,7 @@ public class ErpProductInfoController extends BaseController {
             resp.setCode(EnumRespCode.SUCCESS.getCode());
             resp.setMessage("修改商品信息成功");
         }
+        log.info("/api/product/update，耗时{}ms", System.currentTimeMillis() - start);
         return resp;
     }
 

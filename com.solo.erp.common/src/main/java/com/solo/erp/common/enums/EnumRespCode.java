@@ -8,6 +8,8 @@ public enum EnumRespCode {
     INSERT_ERROR(99989, "新增数据失败，请联系管理员"),
     UPDATE_ERROR(99988, "更新数据失败，请联系管理员"),
     DELETE_ERROR(99987, "删除数据失败，请联系管理员"),
+    SELECT_ERROR(99986, "查询数据失败，请联系管理员"),
+
     DATA_ERROR(99987, "数据查询异常，请联系管理员"),
 
     LOGIN_FAILED(20000, "用户名或密码错误"),

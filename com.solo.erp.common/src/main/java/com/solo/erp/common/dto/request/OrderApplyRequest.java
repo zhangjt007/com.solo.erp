@@ -19,6 +19,7 @@ public class OrderApplyRequest extends BaseRequest {
 
     @NotBlank(message = "订单编号不能为空")
     private String orderNo;
+    private String mobile;
     @Valid
     @NotEmpty
     private List<OrderDetailBean> list;

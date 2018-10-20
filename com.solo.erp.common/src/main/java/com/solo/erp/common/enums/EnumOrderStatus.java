@@ -3,7 +3,8 @@ package com.solo.erp.common.enums;
 public enum EnumOrderStatus {
 
     WAITING_PAY("0", "待支付"),
-    PAYED("1", "已支付");
+    PAYED("1", "已支付"),
+    REFUND("2", "已退款");
 
     final private String code;
     final private String msg;

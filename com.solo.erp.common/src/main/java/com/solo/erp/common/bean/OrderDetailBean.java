@@ -9,10 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 public class OrderDetailBean implements Serializable {
-
     private String productSn;
     private int count;
-
-    @NotNull(message = "商品实际单价不能为空")
     private BigDecimal realPrice;
 }

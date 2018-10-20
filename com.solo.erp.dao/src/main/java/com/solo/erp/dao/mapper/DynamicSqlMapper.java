@@ -3,8 +3,10 @@ package com.solo.erp.dao.mapper;
 import com.solo.erp.dao.model.ErpProductInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface DynamicSqlMapper {
     /**
@@ -15,48 +17,135 @@ public interface DynamicSqlMapper {
     List<HashMap> selectAllMenuAndRole();
 
     /**
-     * 查询登录用户相关信息
+     * 批量插入商品信息（商品模块导入使用）
      *
-     * @return
-     */
-    HashMap selectLoginStaffInfoByLoginName(@Param("loginName") String loginName);
-
-    /**
-     * 根据SN查询收银台显示数据
-     *
-     * @param productSn
-     * @return
-     */
-    List<HashMap> selectProductInfoBySN(@Param("productSn") String productSn);
-
-    /**
-     * 批量插入商品信息
      * @param list
      */
     void batchInsertProduct(@Param("list") List<ErpProductInfo> list);
 
     /**
-     * 查询订单信息
+     * 查询某日订单信息(首页卡牌显示使用)
      *
      * @param date
      * @return
      */
-    HashMap selectTodaySaleOrderInfo(@Param("date") String date);
+    HashMap statisticsSaleInfoByDay(@Param("date") String date, @Param("shopIds") Set<Integer> shopIds);
 
     /**
-     * 查询商品销售量
+     * 查询某日开VIP量(首页卡牌显示使用)
      *
      * @param date
      * @return
      */
-    HashMap selectTodaySaleProductCount(@Param("date") String date);
+    HashMap statisticsOpenVIPByDay(@Param("date") String date, @Param("shopIds") Set<Integer> shopIds);
 
     /**
-     * 查询开VIP量
+     * 查询某时间段订单信息(首页折线图使用)
      *
-     * @param date
+     * @param startDate
+     * @param endDate
+     * @param shopIds
      * @return
      */
-    HashMap selectTodayOpenVipCount(@Param("date") String date);
+    List<HashMap> statisticsSaleInfoByPeriod(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
 
+    /**
+     * 查询某时间段开VIP量(首页折线图使用)
+     *
+     * @param startDate
+     * @param endDate
+     * @param shopIds
+     * @return
+     */
+    List<HashMap> statisticsOpenVIPByPeriod(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
+
+
+    /**
+     * 统计时间段内款式销售金额汇总（首页TOP排行使用）
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    List<HashMap> statisticTopSaleProduct(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds, @Param("limit") int limit);
+
+    /**
+     * 根据商品类别统计（首页饼图使用）
+     *
+     * @param startDate
+     * @param endDate
+     * @param shopIds
+     * @return
+     */
+    List<HashMap> statisticByProductType(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
+
+
+    /**
+     * 统计销售信息（报表模块使用）
+     *
+     * @param startDate
+     * @param endDate
+     * @param shopIds
+     * @return
+     */
+    List<HashMap> statisticsSaleInfo(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
+
+    /**
+     * 统计VIP销售（报表模块使用）
+     *
+     * @param startDate
+     * @param endDate
+     * @param shopIds
+     * @return
+     */
+    List<HashMap> statisticsVIPSaleInfo(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
+
+    /**
+     * 根据生日查询（首页最近过生日使用）
+     *
+     * @param startDate1
+     * @param endDate1
+     * @param startDate2
+     * @param endDate2
+     * @return
+     */
+    List<HashMap> selectVIPByLastBrithday(@Param("startDate1") String startDate1, @Param("endDate1") String endDate1, @Param("startDate2") String startDate2, @Param("endDate2") String endDate2);
+
+    /**
+     * 统计订单成交时间（首页显示使用）
+     *
+     * @param startDate
+     * @param endDate
+     * @param shopIds
+     * @return
+     */
+    List<HashMap> statisticsOrderTime(@Param("startDate") String startDate, @Param("endDate") String endDate, @Param("shopIds") Set<Integer> shopIds);
+
+    /**
+     * 更新库存量
+     *
+     * @param inc
+     * @param shopId
+     * @param productSn
+     * @return
+     */
+    int addInventoryNumByProductSn(@Param("inc") Integer inc, @Param("shopId") Integer shopId, @Param("productSn") String productSn);
+
+    /**
+     * 更新积分和历史积分
+     *
+     * @param score
+     * @param vipId
+     * @return
+     */
+    int addScoreAndHisScoreByVipId(@Param("score") BigDecimal score, @Param("vipId") Integer vipId);
+
+    /**
+     * 更新积分
+     *
+     * @param score
+     * @param vipId
+     * @return
+     */
+    int addScoreByVipId(@Param("score") BigDecimal score, @Param("vipId") Integer vipId);
 }

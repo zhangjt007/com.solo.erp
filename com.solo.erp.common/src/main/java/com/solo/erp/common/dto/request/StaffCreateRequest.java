@@ -3,17 +3,19 @@ package com.solo.erp.common.dto.request;
 import lombok.Data;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @ToString(callSuper = true)
-public class StaffCreateRequest extends BaseQueryRequest{
+public class StaffCreateRequest extends BaseRequest{
     private String staffName;
     private String sex;
-    private Date brithday;
+    private LocalDate brithday;
     private String mobile;
     private String address;
-    private int shopId;
+    private Integer shopId;
+    private String certNo;
     private List<Integer> roles;
 }

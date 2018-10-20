@@ -8,9 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.solo.erp.common.constant.SecurityConstants.EXPIRATION_TIME;
 import static com.solo.erp.common.constant.SecurityConstants.SECRET;
@@ -69,7 +67,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + EXPIRATION_TIME * 1000);
+        return new Date(System.currentTimeMillis() + EXPIRATION_TIME);
     }
 
     private Boolean isTokenExpired(String token) {
@@ -123,5 +121,20 @@ public class JwtTokenUtil implements Serializable {
                 username.equals(user.getUsername())
                         && !isTokenExpired(token)
                         && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+    }
+
+    public static void main(String[] args) {
+        LoginUserBO bo = new LoginUserBO();
+        bo.setShopId(2);
+        bo.setName("zhangsan");
+        List<String> roles = new ArrayList<>();
+        roles.add("admin");
+        roles.add("admin2");
+        bo.setRoles(roles);
+        JwtTokenUtil util = new JwtTokenUtil();
+        String token = util.generateToken(bo);
+        System.out.println("token = " + token);
+        System.out.println(util.getExpirationDateFromToken(token));
+
     }
 }

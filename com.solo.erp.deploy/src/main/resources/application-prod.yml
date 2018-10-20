@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: erp
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/erp?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: erp
+      password: erp#123
+      initial-size: 5
+      max-wait: 60000
+      min-idle: 5
+      max-active: 20
+      validation-query: SELECT 1
+      validation-query-timeout: 60
+      test-on-borrow: true
+      test-while-idle: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: -1
+mybatis:
+  mapper-locations: classpath:mysql/mapper/*.xml
+logging:
+  config: classpath:logging-config-prod.xml

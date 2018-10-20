@@ -7,6 +7,6 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class InventoryUpdateRequest extends BaseRequest {
-    private int id;
-    private int num;
+    private Integer id;
+    private Integer num;
 }

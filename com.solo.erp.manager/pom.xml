@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.solo.erp.dao</groupId>
             <artifactId>com.solo.erp.dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

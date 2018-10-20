@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,7 @@ public class VipInfoCreateRequest extends BaseRequest {
     @NotBlank(message = "性别不能为空")
     private String sex;
     @NotNull(message = "生日不能为空")
-    private Date brithday;
+    private LocalDate brithday;
     @NotBlank(message = "手机号不能为空")
     private String mobile;
     private String email;

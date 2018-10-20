@@ -33,7 +33,8 @@ public class JWTAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader(HEADER_STRING);
         if (authHeader != null && authHeader.startsWith(TOKEN_PREFIX)) {
-            final String authToken = authHeader.substring(TOKEN_PREFIX.length()); // The part after "Bearer "
+            // The part after "Bearer "
+            final String authToken = authHeader.substring(TOKEN_PREFIX.length());
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
             logger.info("checking authentication " + username);

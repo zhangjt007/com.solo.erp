@@ -1,14 +1,13 @@
 package com.solo.erp.common.enums;
 
 public enum EnumSize {
-
-    XS(0, "XS"),
     S(1, "S"),
     M(2, "M"),
     L(3, "L"),
     XL(4, "XL"),
     XXL(5, "XXL"),
-    F(6, "F");
+    XXXL(6, "XXXL"),
+    F(9, "XXL");
 
     final private int code;
     final private String msg;

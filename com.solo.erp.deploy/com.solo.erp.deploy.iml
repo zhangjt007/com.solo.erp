@@ -4,6 +4,13 @@
     <facet type="Spring" name="Spring">
       <configuration />
     </facet>
+    <facet type="web" name="Web">
+      <configuration>
+        <webroots>
+          <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+        </webroots>
+      </configuration>
+    </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
@@ -18,11 +25,15 @@
     <orderEntry type="module" module-name="com.solo.erp.controller" />
     <orderEntry type="module" module-name="com.solo.erp.manager" />
     <orderEntry type="module" module-name="com.solo.erp.dao" />
-    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:6.0.6" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba:druid-spring-boot-starter:1.1.9" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba:druid:1.1.9" level="project" />
     <orderEntry type="module" module-name="com.solo.erp.common" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.47" level="project" />
+    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:6.0.6" level="project" />
+    <orderEntry type="library" name="Maven: org.mybatis.dynamic-sql:mybatis-dynamic-sql:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:druid-spring-boot-starter:1.1.9" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:druid:1.1.9" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.0.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.0.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.0.1.RELEASE" level="project" />

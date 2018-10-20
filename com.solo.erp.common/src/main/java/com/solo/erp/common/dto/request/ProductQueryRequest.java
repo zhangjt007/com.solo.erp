@@ -10,8 +10,8 @@ public class ProductQueryRequest extends BaseQueryRequest {
     private String productNo;
     private String productName;
     private String productType;
-    private int season = -1;
-    private int year = -1;
-    private int wave_band = -1;
-    private int discount = -1;
+    private Integer season;
+    private Integer year;
+    private Integer waveBand;
+    private Integer discount;
 }

@@ -6,8 +6,8 @@ import com.solo.erp.common.enums.EnumRespCode;
 import com.solo.erp.controller.base.BaseController;
 import com.solo.erp.dao.model.ErpRoleInfo;
 import com.solo.erp.dao.model.ErpShopInfo;
-import com.solo.erp.manager.IErpRoleInfoManager;
-import com.solo.erp.manager.IErpShopInfoManager;
+import com.solo.erp.manager.business.IErpRoleInfoManager;
+import com.solo.erp.manager.business.IErpShopInfoManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/system/dict")
+@RequestMapping("/api/system/dict")
 public class ErpSystemDictController extends BaseController {
     @Autowired
-    IErpRoleInfoManager roleInfoManager;
+    private IErpRoleInfoManager roleInfoManager;
     @Autowired
-    IErpShopInfoManager shopInfoManager;
+    private IErpShopInfoManager shopInfoManager;
 
     @GetMapping("/roles")
     public SystemDictResponse fetchRoles() {

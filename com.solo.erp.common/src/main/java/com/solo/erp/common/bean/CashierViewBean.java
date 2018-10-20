@@ -12,14 +12,14 @@ public class CashierViewBean implements Serializable {
     private String productName;
     private String productType;
     private String brandName;
-    private String year;
-    private String waveBand;
-    private String season;
+    private Integer year;
+    private Integer waveBand;
+    private Integer season;
     private String productImg;
     private BigDecimal tagPrice;
     private BigDecimal realPrice;
     private BigDecimal costPrice;
-    private String size;
+    private Integer size;
     private String color;
     private Integer discount;
     private Integer num;

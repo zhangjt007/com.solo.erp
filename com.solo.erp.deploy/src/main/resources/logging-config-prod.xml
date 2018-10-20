@@ -1,5 +1,5 @@
 <configuration debug="false">
-    <property name="SYS_LOG_DIR" value="/root/logs/brickie"/>
+    <property name="SYS_LOG_DIR" value="/home/erp/log"/>
     <!-- 日志存放一年 -->
     <property name="MAXHISTORYDAY" value="356"/>
     <!-- 日志最大MB数 -->

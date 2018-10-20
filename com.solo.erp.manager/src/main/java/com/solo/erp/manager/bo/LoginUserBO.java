@@ -18,7 +18,8 @@ public class LoginUserBO implements UserDetails {
     private String shopName;
     private String name;
     private String salt;
-    private String role;
+    private List<String> roles;
+    private Set<Integer> shops;
     private String username;
     private String password;
     private boolean enabled;
@@ -27,7 +28,9 @@ public class LoginUserBO implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role));
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
         return authorities;
     }
 
@@ -113,12 +116,12 @@ public class LoginUserBO implements UserDetails {
         this.shopName = shopName;
     }
 
-    public String getRole() {
-        return role;
+    public List<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
     public Date getLastPasswordResetDate() {
@@ -145,6 +148,14 @@ public class LoginUserBO implements UserDetails {
         this.staffPhoto = staffPhoto;
     }
 
+    public Set<Integer> getShops() {
+        return shops;
+    }
+
+    public void setShops(Set<Integer> shops) {
+        this.shops = shops;
+    }
+
     @Override
     public String toString() {
         return "LoginUserBO{" +
@@ -155,7 +166,7 @@ public class LoginUserBO implements UserDetails {
                 ", shopName='" + shopName + '\'' +
                 ", name='" + name + '\'' +
                 ", salt='" + salt + '\'' +
-                ", role='" + role + '\'' +
+                ", roles='" + roles + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +

@@ -7,10 +7,11 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 public class InventoryQueryRequest extends BaseQueryRequest {
-    private int num;
+    private Integer num;
     private String productSn;
+    private String productNo;
     private String productName;
     private String brandName;
-    private int size = -1;
+    private Integer size;
     private String color;
 }

@@ -17,8 +17,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -46,7 +44,7 @@ public class JwtWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/images/**", "/**/favicon.ico","/static/**");
+        web.ignoring().antMatchers("/images/**", "/**/favicon.ico", "/static/**");
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -63,9 +61,10 @@ public class JwtWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/user/register").permitAll()
-                .antMatchers("/user/login").permitAll()
-                .antMatchers("/user/refresh_token").permitAll()
+                .antMatchers("/api/user/register").permitAll()
+                .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/user/logout").permitAll()
+                .antMatchers("/api/user/refresh_token").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(authenticationAccessDeniedHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,7 +1,6 @@
 package com.solo.erp.controller.security.common;
 
-import com.solo.erp.manager.IErpStaffManager;
-import com.solo.erp.manager.IErpSysInfoManager;
+import com.solo.erp.manager.business.IErpSysInfoManager;
 import com.solo.erp.manager.bo.UrlRoleRelBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;

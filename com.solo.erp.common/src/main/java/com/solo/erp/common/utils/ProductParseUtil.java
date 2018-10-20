@@ -9,11 +9,20 @@ import java.util.Calendar;
  */
 public class ProductParseUtil {
 
-
+    /**
+     * 品牌解析
+     * @param productSn
+     * @return
+     */
     public static String parseBrandName(String productSn) {
         return productSn.substring(0, 1);
     }
 
+    /**
+     * 年份解析
+     * @param productSn
+     * @return
+     */
     public static int parseYear(String productSn) {
         int parseYear = Integer.parseInt(productSn.substring(1, 2));
         Calendar cal = Calendar.getInstance();
@@ -30,27 +39,57 @@ public class ProductParseUtil {
         return result;
     }
 
+    /**
+     * 系列解析
+     * @param productSn
+     * @return
+     */
     public static int parseSession(String productSn) {
         return Integer.parseInt(productSn.substring(2, 3));
     }
 
+    /**
+     * 波段解析
+     * @param productSn
+     * @return
+     */
     public static int parseWaveBand(String productSn) {
-        return Integer.parseInt(productSn.substring(3, 4));
+        return Integer.parseInt(productSn.substring(4, 6));
     }
 
+    /**
+     *  类型解析
+     * @param productSn
+     * @return
+     */
     public static String parseType(String productSn) {
-        return productSn.substring(4, 5);
+        return productSn.substring(9, 10);
     }
 
+    /**
+     *  颜色解析
+     * @param productSn
+     * @return
+     */
     public static String parseColor(String productSn) {
-        return productSn.substring(7, 9);
+        return productSn.substring(12, 14);
     }
 
+    /**
+     *  尺码解析
+     * @param productSn
+     * @return
+     */
     public static int parseSize(String productSn) {
-        return EnumSize.getEnumByMsg(productSn.substring(9)).getCode();
+        return EnumSize.getEnumByMsg(productSn.substring(14,15)).getCode();
     }
 
+    /**
+     *  商品编号解析
+     * @param productSn
+     * @return
+     */
     public static String parseProductNo(String productSn) {
-        return productSn.substring(0, 7);
+        return productSn.substring(0, 12);
     }
 }

@@ -1,27 +1,3 @@
 spring:
-  application:
-    name: erp
-  datasource:
-    druid:
-      url: jdbc:mysql://39.104.50.53:3306/mall
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: mall
-      password: mall123
-      initial-size: 5
-      max-wait: 60000
-      min-idle: 5
-      max-active: 20
-  redis:
-    host: 39.104.50.53
-    port: 6379
-    password: redis@123
-    jedis:
-      pool:
-        max-idle: 8
-        min-idle: 0
-        max-active: 8
-        max-wait: -1
-mybatis:
-  mapper-locations: classpath:mysql/mapper/*.xml
-logging:
-  config: classpath:logging-config-dev.xml
+  profiles:
+    active: prod
